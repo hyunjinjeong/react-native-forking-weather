@@ -5,16 +5,26 @@ import axios from 'axios';
 
 import Loading from './src/Loading';
 import API_KEY from './env';
-import Weather from './src/Weather';
+import Weather, { Condition } from './src/Weather';
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [temp, setTemp] = useState(0);
+  const [condition, setCondition] = useState<Condition>(Condition.Clear);
 
   useEffect(() => {
     const getWeather = async (latitude: number, longitude: number) => {
-      const { data: { main: { temp }}} = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`);
+      const {
+        data: {
+          main: { temp },
+          weather
+        }
+      } = await axios.get(
+        `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`
+      );
+      
       setTemp(temp);
+      setCondition(weather[0].main);
     };
     
     const getLocation = async () => {
@@ -34,7 +44,7 @@ const App = () => {
   }, []);
 
   return (
-    isLoading ? <Loading /> : <Weather temp={Math.round(temp)} />
+    isLoading ? <Loading /> : <Weather temp={Math.round(temp)} condition={condition} />
   );
 };
 
