@@ -29,7 +29,9 @@ const Weather: React.FC<WeatherProps> = ({ temp, condition }) => {
         <MaterialCommunityIcons size={144} name={weatherOptions[condition].iconName} color="white" />
         <Text style={styles.temp}>{temp}°C</Text>
       </View>
-      <View style={styles.halfContainer}>
+      <View style={{ ...styles.halfContainer, ...styles.textContainer }}>
+        <Text style={styles.title}>{weatherOptions[condition].title}</Text>
+        <Text style={styles.subtitle}>{weatherOptions[condition].subtitle}</Text>
       </View>
     </LinearGradient>
   );
@@ -49,6 +51,21 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  title: {
+    color: "white",
+    fontSize: 44,
+    fontWeight: "300",
+    marginBottom: 10
+  },
+  subtitle: {
+    fontWeight: "600",
+    color: "white",
+    fontSize: 24
+  },
+  textContainer: {
+    paddingHorizontal: 20,
+    alignItems: "flex-start"
   }
 });
 
