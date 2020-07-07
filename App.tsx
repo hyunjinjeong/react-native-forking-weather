@@ -5,14 +5,16 @@ import axios from 'axios';
 
 import Loading from './src/Loading';
 import API_KEY from './env';
+import Weather from './src/Weather';
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [temp, setTemp] = useState(0);
 
   useEffect(() => {
     const getWeather = async (latitude: number, longitude: number) => {
-      const { data } = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}`)
-      console.log(data);
+      const { data: { main: { temp }}} = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`);
+      setTemp(temp);
     };
     
     const getLocation = async () => {
@@ -27,12 +29,12 @@ const App = () => {
         Alert.alert("Permission denied.");
       }
     }
-    
+
     getLocation();
   }, []);
 
   return (
-    isLoading && <Loading />
+    isLoading ? <Loading /> : <Weather temp={Math.round(temp)} />
   );
 };
 
